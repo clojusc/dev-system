@@ -1,6 +1,6 @@
 # dev-system
 
-*A utility library for setting up consisten dev environments*
+*A utility library for setting up consistent dev environments*
 
 [![][logo]][logo-link]
 
@@ -111,6 +111,7 @@ Basically, all I need to do from here on out is:
 ## License
 
 Copyright © 2015-2018 Duncan McGreggor
+
 Copyright © 2018 NASA
 
 Apache License, Version 2.0.

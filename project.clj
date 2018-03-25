@@ -16,7 +16,7 @@
        "\u001B[35m]\u001B[33m λ\u001B[m=> "))
 
 (defproject clojusc/dev-system "0.1.0"
-  :description "A utility library for setting up consisten dev environments"
+  :description "A utility library for setting up consistent dev environments"
   :url "https://github.com/clojusc/dev-system"
   :license {
     :name "Apache License, Version 2.0"
