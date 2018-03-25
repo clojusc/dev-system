@@ -25,7 +25,7 @@ A project of it's own is the first step :-)
 
 Basically, all I need to do from here on out is:
 
-1. Include the [dependency](dep) in `project.clj`
+1. Include the [dependency][dep] in `project.clj`
 1. Create a `repl` namespace in someplace like `dev-resources`.
 1. Require the appropriate bits, and populate the `repl` ns.
 1. Start up the REPL and type `(startup)`, `(shutdown)`, or
