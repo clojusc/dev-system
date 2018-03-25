@@ -15,43 +15,28 @@
        ns
        "\u001B[35m]\u001B[33m λ\u001B[m=> "))
 
-(defproject cmr-graph "0.1.0-SNAPSHOT"
-  :description "A service and API for querying CMR metadata relationships"
-  :url "https://github.com/cmr-exchange/cmr-graph"
+(defproject clojusc/dev-system "0.1.0"
+  :description "A utility library for setting up consisten dev environments"
+  :url "https://github.com/clojusc/dev-system"
   :license {
     :name "Apache License, Version 2.0"
     :url "http://www.apache.org/licenses/LICENSE-2.0"}
   :dependencies [
-    [cheshire "5.8.0"]
-    [clojurewerkz/elastisch "3.0.0"]
-    [clojurewerkz/neocons "3.2.0"]
-    [clojusc/trifl "0.2.0"]
     [clojusc/twig "0.3.2"]
     [com.stuartsierra/component "0.3.2"]
-    [digest "1.4.6"]
-    [http-kit "2.2.0"]
-    [metosin/reitit-core "0.1.1-SNAPSHOT"]
-    [metosin/reitit-ring "0.1.1-SNAPSHOT"]
-    [metosin/ring-http-response "0.9.0"]
-    [org.clojure/clojure "1.9.0"]
-    [org.clojure/data.csv "0.1.4"]
-    [ring/ring-core "1.6.3"]
-    [ring/ring-codec "1.1.0"]
-    [ring/ring-defaults "0.3.1"]]
-  :main cmr.graph.core
+    [org.clojure/clojure "1.9.0"]]
   :profiles {
     :ubercompile {
       :aot :all}
     :dev {
       :dependencies [
-        [org.clojure/tools.namespace "0.2.11"]
-        [proto-repl "0.3.1"]]
+        [org.clojure/tools.namespace "0.2.11"]]
       :plugins [
         [lein-shell "0.5.0"]
         [venantius/ultra "0.5.2"]]
       :source-paths ["dev-resources/src"]
       :repl-options {
-        :init-ns cmr.graph.dev
+        :init-ns clojusc.dev.system.repl
         :prompt ~get-prompt
         :init ~(println (get-banner))}}
     :lint {
@@ -69,24 +54,7 @@
       :plugins [
         [lein-ltest "0.3.0"]]
       :test-selectors {
-        :select :select}}
-    :docs {
-      :dependencies [
-        [clojang/codox-theme "0.2.0-SNAPSHOT"]]
-      :plugins [
-        [lein-codox "0.10.3"]
-        [lein-marginalia "0.9.1"]]
-      :codox {
-        :project {
-          :name "CMR Graph"
-          :description "A service and API for querying CMR metadata relationships"}
-        :namespaces [#"^cmr\.graph\.(?!dev)"]
-        :metadata {
-          :doc/format :markdown
-          :doc "Documentation forthcoming"}
-        :themes [:clojang]
-        :doc-paths ["resources/docs"]
-        :output-path "docs/current"}}}
+        :select :select}}}
   :aliases {
     ;; Dev & Testing Aliases
     "ubercompile" ["with-profile" "+ubercompile" "compile"]
@@ -102,28 +70,4 @@
     "lint" ["do"
       ["kibit"]
       ;["eastwood"]
-      ]
-    "ltest" ["with-profile" "+test" "ltest"]
-    ;; Documentation
-    "codox" ["with-profile" "+docs"
-      "codox"]
-    "marginalia" ["with-profile" "+docs"
-      "marg" "--dir" "docs/current"
-             "--file" "marginalia.html"
-             "--name" "Clojure Protocol Buffer Library"]
-    "docs" ["do"
-      ["codox"]
-      ["marginalia"]]
-    ;; Application
-    "start-cmr-graph"
-      ["trampoline" "run"]
-    ;; Docker Aliases
-    "docker-clean" [
-      "shell"
-      "docker" "system" "prune" "-f"]
-    "start-infra" [
-      "shell"
-      "docker-compose" "-f" "resources/docker/docker-compose.yml" "up"]
-    "stop-infra" [
-      "shell"
-      "docker-compose" "-f" "resources/docker/docker-compose.yml" "down"]})
+      ]})
