@@ -1,3 +1,4 @@
+"Throwing science at the wall"
 
     |                             |
 ,---|,---..    ,   ,---.,   .,---.|--- ,---.,-.-.
@@ -5,3 +6,5 @@
 `---'`---'  `'     `---'`---|`---'`---'`---'` ' '
                         `---'
 
+created in the CLOJURE-AIDED ENRICHMENT CENTER
+https://github.com/clojusc
