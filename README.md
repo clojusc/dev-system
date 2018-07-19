@@ -17,7 +17,7 @@ done:
    * the NASA CMR-Graph project
    * the NASA CMR-OPeNDAP project
    
-In partciular, that last one is where I shifted to a protocol-based approach.
+In partciular, the second one is where I shifted to a protocol-based approach.
 So far, I've been happiest with this approach, and wan to start using this
 across all my Clojure projects.
 
