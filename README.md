@@ -2,7 +2,7 @@
 
 *A utility library for setting up consistent dev environments*
 
-[![][logo]][logo-link]
+[![Project logo][logo]][logo-link]
 
 
 ## About
@@ -12,8 +12,11 @@ keeps getting copied and pasted into new projects, with slight updates and
 improvments at each new iteration. The most recent big improvements were
 done:
 * In 2017, as part of the Dragon project
-* In 2018, as part of the Hexagram30 projects and the NASA CMR-Graph project.
-
+* In 2018, as part of:
+   * the Hexagram30 projects
+   * the NASA CMR-Graph project
+   * the NASA CMR-OPeNDAP project
+   
 In partciular, that last one is where I shifted to a protocol-based approach.
 So far, I've been happiest with this approach, and wan to start using this
 across all my Clojure projects.
@@ -119,6 +122,7 @@ Apache License, Version 2.0.
 
 <!-- Named page links below: /-->
 
-[logo]: https://avatars0.githubusercontent.com/u/18177940
+[logo]: https://avatars0.githubusercontent.com/u/18177940?s=250
+[logo-large]: https://avatars0.githubusercontent.com/u/18177940
 [logo-link]: https://github.com/clojusc/
 [dep]: https://clojars.org/clojusc/dev-system
