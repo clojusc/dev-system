@@ -1,5 +1,5 @@
-(ns clojusc.dev.system.impl.state
-  "Generic development system management."
+(ns clojusc.system-manager.system.impl.state
+  "Generic state tracking for a Componenet system."
   (:require
     [com.stuartsierra.component :as component]
     [taoensso.timbre :as log]))
