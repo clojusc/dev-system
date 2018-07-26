@@ -15,8 +15,8 @@
        ns
        "\u001B[35m]\u001B[33m λ\u001B[m=> "))
 
-(defproject clojusc/dev-system "0.1.0"
-  :description "A utility library for setting up consistent dev environments"
+(defproject clojusc/system-manager "0.1.0"
+  :description "A Clojure library for setting up consistent Component-based systems"
   :url "https://github.com/clojusc/dev-system"
   :license {
     :name "Apache License, Version 2.0"

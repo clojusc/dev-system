@@ -1,6 +1,6 @@
-# dev-system
+# system-manager
 
-*A utility library for setting up consistent dev environments*
+*A Clojure library for setting up consistent Component-based systems*
 
 [![Project logo][logo]][logo-link]
 
@@ -14,9 +14,9 @@ done:
 * In 2017, as part of the Dragon project
 * In 2018, as part of:
    * the Hexagram30 projects
-   * the NASA CMR-Graph project
-   * the NASA CMR-OPeNDAP project
-   
+   * the NASA CMR-Graph and CMR-OPeNDAP projects
+   * the Clojang component project
+
 In partciular, the second one is where I shifted to a protocol-based approach.
 So far, I've been happiest with this approach, and wan to start using this
 across all my Clojure projects.
@@ -26,13 +26,26 @@ A project of it's own is the first step :-)
 
 ## Usage
 
-Basically, all I need to do from here on out is:
+There are two ways to use this:
+
+1. as a development system (i.e., in the REPL)
+1. as something called from `(-main)` for use in running production apps
+
+
+### Development System
+
+All you need to do from here on out is:
 
 1. Include the [dependency][dep] in `project.clj`
 1. Create a `repl` namespace in someplace like `dev-resources`.
 1. Require the appropriate bits, and populate the `repl` ns.
 1. Start up the REPL and type `(startup)`, `(shutdown)`, or
    `(reset)`.
+
+
+### Production Use
+
+TBD
 
 
 ## Example REPL Namespace
@@ -42,7 +55,7 @@ Basically, all I need to do from here on out is:
   "A development namespace for the my project.
 
   Somethink like this can be created for any project that wishes to use the
-  dev-system for managing REPL state in its own development environment."
+  system-manager for managing REPL state in its own development environment."
   (:require
    [clojure.java.io :as io]
    [clojure.pprint :refer [pprint]]
@@ -125,4 +138,4 @@ Apache License, Version 2.0.
 [logo]: https://avatars0.githubusercontent.com/u/18177940?s=250
 [logo-large]: https://avatars0.githubusercontent.com/u/18177940
 [logo-link]: https://github.com/clojusc/
-[dep]: https://clojars.org/clojusc/dev-system
+[dep]: https://clojars.org/clojusc/system-manager
