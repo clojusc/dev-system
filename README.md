@@ -72,8 +72,8 @@ TBD
 (logger/set-level! '[myproj] :debug)
 
 (def ^:dynamic *mgr* nil)
-(def init-component "myproj.components.core")
-(def after-refresh 'myproj.dev.repl/startup)
+(def system-init-fn 'clojusc.system-manager.components.core/init)
+(def after-refresh-fn 'clojusc.system-manager.repl/startup)
 
 (defn mgr-arg
   []
@@ -98,7 +98,7 @@ TBD
 (defn startup
   []
   (alter-var-root #'*mgr* (constantly (system-api/create-state-manager)))
-  (system-api/set-system-ns (:state *mgr*) init-component)
+  (system-api/set-system-ns (:state *mgr*) system-init-fn)
   (system-api/startup *mgr*))
 
 (defn shutdown
@@ -119,7 +119,7 @@ TBD
 (defn reset
   []
   (shutdown)
-  (repl/refresh :after after-refresh))
+  (repl/refresh :after after-refresh-fn))
 
 (def refresh #'repl/refresh)
 
