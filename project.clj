@@ -30,13 +30,14 @@
       :aot :all}
     :dev {
       :dependencies [
+        [clojusc/trifl "0.3.0"]
         [org.clojure/tools.namespace "0.2.11"]]
       :plugins [
         [lein-shell "0.5.0"]
         [venantius/ultra "0.5.2"]]
       :source-paths ["dev-resources/src"]
       :repl-options {
-        :init-ns clojusc.dev.system.repl
+        :init-ns clojusc.system-manager.repl
         :prompt ~get-prompt
         :init ~(println (get-banner))}}
     :lint {

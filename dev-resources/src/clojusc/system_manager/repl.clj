@@ -1,16 +1,18 @@
-(ns clojusc.dev.system.repl
-  "A development namespace for the dev-system project.
+(ns clojusc.system-manager.repl
+  "A development namespace for the system-manager project.
 
   Something like this can be created for any project that wishes to use the
-  dev-system for managing REPL state in its own development environment."
+  system-manager for managing a Component-based system either in the REPL (for
+  development), or in `(-main)` as part of a production deployment."
   (:require
    [clojure.java.io :as io]
    [clojure.pprint :refer [pprint]]
    [clojure.tools.namespace.repl :as repl]
+   [clojusc.system-manager.components.core]
+   [clojusc.system-manager.system.core :as system-api]
    [clojusc.twig :as logger]
-   [clojusc.dev.system.core :as system-api]
-   [clojusc.dev.components.core]
-   [com.stuartsierra.component :as component]))
+   [com.stuartsierra.component :as component]
+   [trifl.java :refer [show-methods]]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Initial Setup & Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -19,6 +21,8 @@
 (logger/set-level! '[clojusc.dev] :debug)
 
 (def ^:dynamic *mgr* nil)
+(def init-component "clojusc.system-manager.components.core")
+(def after-refresh 'clojusc.system-manager.repl/startup)
 
 (defn banner
   []
@@ -48,7 +52,7 @@
 (defn startup
   []
   (alter-var-root #'*mgr* (constantly (system-api/create-state-manager)))
-  (system-api/set-system-ns (:state *mgr*) "clojusc.dev.components.core")
+  (system-api/set-system-ns (:state *mgr*) init-component)
   (system-api/startup *mgr*))
 
 (defn shutdown
@@ -69,6 +73,6 @@
 (defn reset
   []
   (shutdown)
-  (repl/refresh :after 'clojusc.dev.system.repl/startup))
+  (repl/refresh :after after-refresh))
 
 (def refresh #'repl/refresh)

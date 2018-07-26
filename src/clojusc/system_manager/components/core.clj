@@ -1,4 +1,4 @@
-(ns clojusc.dev.components.core
+(ns clojusc.system-manager.components.core
   "A placeholder, no-op component namespace.")
 
 (defn init

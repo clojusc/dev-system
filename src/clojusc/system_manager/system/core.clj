@@ -1,11 +1,11 @@
-(ns clojusc.dev.system.core
-  "A generic development system management API."
+(ns clojusc.system-manager.system.core
+  "State tracking and management API for a Component system."
   (:require
-    [clojusc.dev.system.impl.management :as management]
-    [clojusc.dev.system.impl.state :as state])
+    [clojusc.system-manager.system.impl.management :as management]
+    [clojusc.system-manager.system.impl.state :as state])
   (:import
-    (clojusc.dev.system.impl.management StateManager)
-    (clojusc.dev.system.impl.state StateTracker)))
+    (clojusc.system_manager.system.impl.management StateManager)
+    (clojusc.system_manager.system.impl.state StateTracker)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   System State API   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

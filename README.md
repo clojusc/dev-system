@@ -60,8 +60,8 @@ TBD
    [clojure.java.io :as io]
    [clojure.pprint :refer [pprint]]
    [clojure.tools.namespace.repl :as repl]
+   [clojusc.system-manager.system.core :as system-api]
    [clojusc.twig :as logger]
-   [clojusc.dev.system.core :as system-api]
    [com.stuartsierra.component :as component]
    [myproj.components.core]))
 
@@ -72,6 +72,8 @@ TBD
 (logger/set-level! '[myproj] :debug)
 
 (def ^:dynamic *mgr* nil)
+(def init-component "myproj.components.core")
+(def after-refresh 'myproj.dev.repl/startup)
 
 (defn mgr-arg
   []
@@ -96,7 +98,7 @@ TBD
 (defn startup
   []
   (alter-var-root #'*mgr* (constantly (system-api/create-state-manager)))
-  (system-api/set-system-ns (:state *mgr*) "myproj.components.core")
+  (system-api/set-system-ns (:state *mgr*) init-component)
   (system-api/startup *mgr*))
 
 (defn shutdown
@@ -117,7 +119,7 @@ TBD
 (defn reset
   []
   (shutdown)
-  (repl/refresh :after 'myproj.dev.repl/startup))
+  (repl/refresh :after after-refresh))
 
 (def refresh #'repl/refresh)
 
