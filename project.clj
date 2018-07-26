@@ -22,7 +22,7 @@
     :name "Apache License, Version 2.0"
     :url "http://www.apache.org/licenses/LICENSE-2.0"}
   :dependencies [
-    [clojusc/twig "0.3.2"]
+    [clojusc/twig "0.3.3"]
     [com.stuartsierra/component "0.3.2"]
     [org.clojure/clojure "1.9.0"]]
   :profiles {
@@ -43,7 +43,7 @@
       :source-paths ^:replace ["src"]
       :test-paths ^:replace []
       :plugins [
-        [jonase/eastwood "0.2.5"]
+        [jonase/eastwood "0.2.9"]
         [lein-ancient "0.6.15"]
         [lein-bikeshed "0.5.1"]
         [lein-kibit "0.1.6"]
