@@ -11,6 +11,7 @@
 (def ^:dynamic *state*
   (atom {:status :stopped
          :system nil
+         :init-fn identity
          :ns ""}))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -43,6 +44,14 @@
   [this value]
   (set-state this (assoc (get-state this) :system value)))
 
+(defn get-system-init-fn
+  [this]
+  (:init-fn (get-state this)))
+
+(defn set-system-init-fn
+  [this fq-fn]
+  (set-state this (assoc (get-state this) :init-fn fq-fn)))
+
 (defn get-system-ns
   [this]
   (:ns (get-state this)))
@@ -58,6 +67,8 @@
    :set-status set-status
    :get-system get-system
    :set-system set-system
+   :get-system-init-fn get-system-init-fn
+   :set-system-init-fn set-system-init-fn
    :get-system-ns get-system-ns
    :set-system-ns set-system-ns})
 

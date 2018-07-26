@@ -18,6 +18,8 @@
   (set-status [this value])
   (get-system [this])
   (set-system [this value])
+  (get-system-init-fn [this])
+  (set-system-init-fn [this value])
   (get-system-ns [this])
   (set-system-ns [this value]))
 

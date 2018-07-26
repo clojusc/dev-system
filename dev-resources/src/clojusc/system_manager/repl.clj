@@ -21,8 +21,8 @@
 (logger/set-level! '[clojusc.dev] :debug)
 
 (def ^:dynamic *mgr* nil)
-(def init-component "clojusc.system-manager.components.core")
-(def after-refresh 'clojusc.system-manager.repl/startup)
+(def system-init-fn 'clojusc.system-manager.components.core/init)
+(def after-refresh-fn 'clojusc.system-manager.repl/startup)
 
 (defn banner
   []
@@ -52,7 +52,7 @@
 (defn startup
   []
   (alter-var-root #'*mgr* (constantly (system-api/create-state-manager)))
-  (system-api/set-system-ns (:state *mgr*) init-component)
+  (system-api/set-system-init-fn (:state *mgr*) system-init-fn)
   (system-api/startup *mgr*))
 
 (defn shutdown
@@ -73,6 +73,6 @@
 (defn reset
   []
   (shutdown)
-  (repl/refresh :after after-refresh))
+  (repl/refresh :after after-refresh-fn))
 
 (def refresh #'repl/refresh)

@@ -3,7 +3,10 @@
   (:require
     [clojusc.system-manager.system.impl.state :as state]
     [com.stuartsierra.component :as component]
-    [taoensso.timbre :as log]))
+    [taoensso.timbre :as log])
+  (:import
+    (clojure.lang Namespace)
+    (clojure.lang Symbol)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Transition Vars   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -21,13 +24,13 @@
 ;;;   Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn- resolve-by-name
-  [an-ns a-fun]
-  (resolve (symbol (str an-ns "/" a-fun))))
-
 (defn- call-by-name
-  [an-ns a-fun & args]
-  (apply (resolve-by-name an-ns a-fun) args))
+  ([^Symbol ns-slash-fn]
+    (apply (resolve ns-slash-fn) []))
+  ([^Symbol ns-slash-fn args]
+    (apply (resolve ns-slash-fn) args))
+  ([^Namespace an-ns ^Symbol a-fun args]
+    (apply (ns-resolve an-ns a-fun) args)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   State Management Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -43,8 +46,7 @@
       (log/warn "System has aready been initialized.")
       (do
         (state/set-system (:state this)
-                          (call-by-name (state/get-system-ns (:state this))
-                                        "init"))
+                          (call-by-name (state/get-system-init-fn (:state this))))
         (state/set-status (:state this) :initialized)))
     (state/get-status (:state this))))
 
