@@ -20,14 +20,22 @@
 ;;;   Initial Setup & Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(logger/set-level! '[clojusc.dev] :debug)
-
 (def setup-options {
   :init 'clojusc.system-manager.components.core/init
-  :after-refresh 'clojusc.system-manager.repl/startup
+  :after-refresh 'clojusc.system-manager.repl/init-and-startup
   :throw-errors false})
 
-(setup-manager setup-options)
+(defn init
+  []
+  (logger/set-level! '[clojusc.dev] :debug)
+  (setup-manager setup-options))
+
+(defn init-and-startup
+  []
+  (init)
+  (startup))
+
+(init)
 
 (defn banner
   []
