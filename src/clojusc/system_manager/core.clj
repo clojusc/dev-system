@@ -19,7 +19,7 @@
 
 ;; Utility Functions
 
-(defn mgr-arg
+(defn- mgr-arg
   []
   (or *mgr*
       (let [msg (str "A state manager is not defined; "
@@ -28,7 +28,7 @@
           (throw (new Exception msg))
           {:error msg}))))
 
-(defn system-arg
+(defn- system-arg
   []
   (if-let [state (:state *mgr*)]
     (system-api/get-system state)
@@ -38,13 +38,13 @@
         (throw (new Exception msg))
         {:error msg}))))
 
-(defn call-if-no-error
+(defn- call-if-no-error
   [func data & args]
   (if (:error data)
     data
     (apply func data args)))
 
-(defn state-arg
+(defn- state-arg
   []
   (call-if-no-error :state (mgr-arg)))
 
@@ -92,7 +92,6 @@
 (def manager #'mgr-arg)
 (def state #'state-arg)
 (def system #'system-arg)
-
 
 (defn get-state
   []
