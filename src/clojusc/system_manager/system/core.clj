@@ -1,5 +1,5 @@
 (ns clojusc.system-manager.system.core
-  "State tracking and management API for a Component system."
+  "A mid-level state tracking and management API for a Component-based system."
   (:require
     [clojusc.system-manager.system.impl.management :as management]
     [clojusc.system-manager.system.impl.state :as state])
