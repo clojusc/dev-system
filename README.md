@@ -32,6 +32,11 @@ There are two ways to use this:
 1. as something called from `(-main)` for use in running production apps
 
 
+### Production Use
+
+TBD
+
+
 ### Development System
 
 All you need to do from here on out is:
@@ -42,87 +47,44 @@ All you need to do from here on out is:
 1. Start up the REPL and type `(startup)`, `(shutdown)`, or
    `(reset)`.
 
+The REPL namespace for this project is an example of this approach; for more
+insight, see `dev-resources/src/clojusc/system_manager/repl.clj`.
 
-### Production Use
-
-TBD
-
-
-## Example REPL Namespace
+Here's another example:
 
 ```clj
 (ns myproj.dev.repl
-  "A development namespace for the my project.
+  "A development namespace for 'my project'.
 
-  Somethink like this can be created for any project that wishes to use the
+  Something like this can be created for any project that wishes to use the
   system-manager for managing REPL state in its own development environment."
   (:require
-   [clojure.java.io :as io]
-   [clojure.pprint :refer [pprint]]
-   [clojure.tools.namespace.repl :as repl]
-   [clojusc.system-manager.system.core :as system-api]
+   [clojusc.system-manager.core :refer [
+     refresh reset restart setup-manager shutdown startup system]]
    [clojusc.twig :as logger]
-   [com.stuartsierra.component :as component]
    [myproj.components.core]))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;   Initial Setup & Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(def setup-options {
+  :init 'clojusc.system-manager.components.core/init
+  :after-refresh 'clojusc.system-manager.repl/init-and-startup
+  :throw-errors false})
 
-(logger/set-level! '[myproj] :debug)
-
-(def ^:dynamic *mgr* nil)
-(def system-init-fn 'clojusc.system-manager.components.core/init)
-(def after-refresh-fn 'clojusc.system-manager.repl/startup)
-
-(defn mgr-arg
+(defn init
   []
-  (if *mgr*
-    *mgr*
-    (throw (new Exception
-                (str "A state manager is not defined; "
-                     "have you run (startup)?")))))
+  (logger/set-level! '[clojusc.dev] :debug)
+  (setup-manager setup-options))
 
-(defn system-arg
+(defn init-and-startup
   []
-  (if-let [state (:state *mgr*)]
-    (system-api/get-system state)
-    (throw (new Exception
-                (str "System data structure is not defined; "
-                     "have you run (startup)?")))))
+  (init)
+  (startup))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;   State Management   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(init)
 
-(defn startup
+(defn banner
   []
-  (alter-var-root #'*mgr* (constantly (system-api/create-state-manager)))
-  (system-api/set-system-ns (:state *mgr*) system-init-fn)
-  (system-api/startup *mgr*))
-
-(defn shutdown
-  []
-  (when *mgr*
-    (let [result (system-api/shutdown (mgr-arg))]
-      (alter-var-root #'*mgr* (constantly nil))
-      result)))
-
-(defn system
-  []
-  (system-api/get-system (:state (mgr-arg))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;   Reloading Management   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defn reset
-  []
-  (shutdown)
-  (repl/refresh :after after-refresh-fn))
-
-(def refresh #'repl/refresh)
-
+  (println (slurp (io/resource "text/banner.txt")))
+  :ok)
 ```
 
 

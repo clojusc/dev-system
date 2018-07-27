@@ -7,7 +7,6 @@
   (:require
    [clojure.java.io :as io]
    [clojure.pprint :refer [pprint]]
-   [clojure.tools.namespace.repl :as repl]
    [clojusc.system-manager.components.core]
    [clojusc.system-manager.core :refer [
      refresh reset restart setup-manager shutdown startup system]]
@@ -15,10 +14,6 @@
    [clojusc.twig :as logger]
    [com.stuartsierra.component :as component]
    [trifl.java :refer [show-methods]]))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;   Initial Setup & Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def setup-options {
   :init 'clojusc.system-manager.components.core/init
