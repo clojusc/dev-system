@@ -1,5 +1,9 @@
 # system-manager
 
+[![Build Status][travis-badge]][travis]
+[![Dependencies Status][deps-badge]][deps]
+[![Clojars Project][clojars-badge]][clojars]
+
 *A Clojure library for setting up consistent Component-based systems*
 
 [![Project logo][logo]][logo-link]
@@ -108,3 +112,9 @@ Apache License, Version 2.0.
 [logo-large]: https://avatars0.githubusercontent.com/u/18177940
 [logo-link]: https://github.com/clojusc/
 [dep]: https://clojars.org/clojusc/system-manager
+[travis]: https://travis-ci.org/clojusc/system-manager
+[travis-badge]: https://travis-ci.org/clojusc/system-manager.png?branch=master
+[deps]: http://jarkeeper.com/clojusc/system-manager
+[deps-badge]: http://jarkeeper.com/clojusc/system-manager/status.svg
+[clojars]: https://clojars.org/clojusc/system-manager
+[clojars-badge]: https://img.shields.io/clojars/v/clojusc/system-manager.svg
