@@ -11,7 +11,8 @@
 (def ^:dynamic *state*
   (atom {:status :stopped
          :system nil
-         :init-fn identity
+         :init-fn 'identity
+         :refresh-fn 'identity
          :ns ""}))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
