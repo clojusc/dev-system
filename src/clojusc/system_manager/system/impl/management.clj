@@ -90,6 +90,10 @@
     (stop this)
     (start this mode)))
 
+(defn restart-component
+  ([this component-key]
+    ))
+
 (defn startup
   "Initialize a system and start all of its components.
 
@@ -132,6 +136,7 @@
    :start start
    :stop stop
    :restart restart
+   :restart-component restart-component
    :startup startup
    :shutdown shutdown})
 

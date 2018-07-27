@@ -37,6 +37,7 @@
   (start [this] [this mode])
   (stop [this])
   (restart [this] [this mode])
+  (restart-component [this component-key])
   (startup [this] [this mode])
   (shutdown [this]))
 
