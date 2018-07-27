@@ -10,7 +10,7 @@
 
 (def ^:dynamic *mgr* nil)
 (def ^:dynamic *system-init-fn* 'identity)
-(def ^:dynamic *after-refresh-fn* 'identity)
+(def ^:dynamic *after-refresh-fn* (ns-resolve *ns* 'startup))
 (def ^:dynamic *throw-errors* false)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -60,9 +60,7 @@
   ([component-key]
     (system-api/restart (system-arg) component-key)))
 
-(defn system
-  []
-  (system-api/get-system (:state (mgr-arg))))
+(def system #'system-arg)
 
 ;; Reloading Management
 
@@ -76,5 +74,5 @@
 (defn setup-manager
   [opts]
   (alter-var-root #'*system-init-fn* (constantly (:init opts)))
-  (alter-var-root #'*after-refresh-fn* (constantly (:refresh opts)))
+  (alter-var-root #'*after-refresh-fn* (constantly (:after-refresh opts)))
   (alter-var-root #'*throw-errors* (constantly (:throw-errors opts))))
