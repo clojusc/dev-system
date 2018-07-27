@@ -53,6 +53,13 @@
       (alter-var-root #'*mgr* (constantly nil))
       result)))
 
+(defn restart
+  ([]
+    (shutdown)
+    (startup))
+  ([component-key]
+    (system-api/restart (system-arg) component-key)))
+
 (defn system
   []
   (system-api/get-system (:state (mgr-arg))))
@@ -68,6 +75,6 @@
 
 (defn setup-manager
   [opts]
-  (alter-var-root #'*system-init-fn* (constantly (:init-fn opts)))
-  (alter-var-root #'*after-refresh-fn* (constantly (:refresh-fn opts)))
+  (alter-var-root #'*system-init-fn* (constantly (:init opts)))
+  (alter-var-root #'*after-refresh-fn* (constantly (:refresh opts)))
   (alter-var-root #'*throw-errors* (constantly (:throw-errors opts))))

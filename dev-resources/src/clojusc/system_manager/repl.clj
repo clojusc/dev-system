@@ -10,7 +10,7 @@
    [clojure.tools.namespace.repl :as repl]
    [clojusc.system-manager.components.core]
    [clojusc.system-manager.core :refer [
-     refresh reset setup-manager shutdown startup system]]
+     refresh reset restart setup-manager shutdown startup system]]
    [clojusc.system-manager.system.core :as system-api]
    [clojusc.twig :as logger]
    [com.stuartsierra.component :as component]
