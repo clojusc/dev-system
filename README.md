@@ -35,6 +35,23 @@ There are two ways to use this:
 1. as a development system (i.e., in the REPL)
 1. as something called from `(-main)` for use in running production apps
 
+More details on those usages are below, but first, here is more useful
+info:
+
+Core/top-level API namespace: `clojusc.system-manager.core`
+
+Core/top-level API public functions:
+
+* `get-state`
+* `get-status`
+* `get-system-init-fn`
+* `get-system-ns`
+* `reset`
+* `restart`
+* `setup-manager`
+* `shutdown`
+* `startup`
+
 
 ### Production Use
 
@@ -45,11 +62,11 @@ TBD
 
 All you need to do from here on out is:
 
-1. Include the [dependency][dep] in `project.clj`
+1. Include the [dependency][dep] in your `project.clj`
 1. Create a `repl` namespace in someplace like `dev-resources`.
-1. Require the appropriate bits, and populate the `repl` ns.
-1. Start up the REPL and type `(startup)`, `(shutdown)`, or
-   `(reset)`.
+1. Require the appropriate bits and add some init code to the `repl` namespace.
+1. Start up the REPL and type `(startup)`, `(shutdown)`,
+   `(reset)`, etc.
 
 The REPL namespace for this project is an example of this approach; for more
 insight, see `dev-resources/src/clojusc/system_manager/repl.clj`.
