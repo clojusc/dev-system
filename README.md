@@ -63,6 +63,11 @@ Here's another example:
    [clojusc.twig :as logger]
    [myproj.components.core]))
 
+(def setup-options {
+  :init 'myproj.components.core/init
+  :after-refresh 'myproj.dev.repl/init-and-startup
+  :throw-errors false})
+
 (defn init
   []
   "This is used to set the options and any other global data.
