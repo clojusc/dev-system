@@ -38,6 +38,16 @@
         (throw (new Exception msg))
         {:error msg}))))
 
+(defn call-if-no-error
+  [func data & args]
+  (if (:error data)
+    data
+    (apply func data args)))
+
+(defn state-arg
+  []
+  (call-if-no-error :state (mgr-arg)))
+
 ;; State Management
 
 (defn startup
@@ -60,8 +70,6 @@
   ([component-key]
     (system-api/restart (system-arg) component-key)))
 
-(def system #'system-arg)
-
 ;; Reloading Management
 
 (defn reset
@@ -71,8 +79,33 @@
 
 (def refresh #'repl/refresh)
 
+;; Initialization
+
 (defn setup-manager
   [opts]
   (alter-var-root #'*system-init-fn* (constantly (:init opts)))
   (alter-var-root #'*after-refresh-fn* (constantly (:after-refresh opts)))
   (alter-var-root #'*throw-errors* (constantly (:throw-errors opts))))
+
+;; Convenience wrappers
+
+(def manager #'mgr-arg)
+(def state #'state-arg)
+(def system #'system-arg)
+
+
+(defn get-state
+  []
+  (call-if-no-error system-api/get-state (state-arg)))
+
+(defn get-status
+  []
+  (call-if-no-error system-api/get-status (state-arg)))
+
+(defn get-system-init-fn
+  []
+  (call-if-no-error system-api/get-system-init-fn (state-arg)))
+
+(defn get-system-ns
+  []
+  (call-if-no-error system-api/get-system-ns (state-arg)))

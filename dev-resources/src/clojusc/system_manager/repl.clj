@@ -8,8 +8,7 @@
    [clojure.java.io :as io]
    [clojure.pprint :refer [pprint]]
    [clojusc.system-manager.components.core]
-   [clojusc.system-manager.core :refer [
-     refresh reset restart setup-manager shutdown startup system]]
+   [clojusc.system-manager.core :refer :all]
    [clojusc.system-manager.system.core :as system-api]
    [clojusc.twig :as logger]
    [com.stuartsierra.component :as component]

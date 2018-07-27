@@ -59,8 +59,7 @@ Here's another example:
   Something like this can be created for any project that wishes to use the
   system-manager for managing REPL state in its own development environment."
   (:require
-   [clojusc.system-manager.core :refer [
-     refresh reset restart setup-manager shutdown startup system]]
+   [clojusc.system-manager.core :refer :all]
    [clojusc.twig :as logger]
    [myproj.components.core]))
 
