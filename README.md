@@ -86,8 +86,8 @@ Here's another example:
   (startup))
 
 ;; It is not always desired that a system be started up upon REPL loading.
-;; Thus, we set the options and perform any global operations with init,
-;; and let the user determine when then want to bring up (a potentially
+;; Thus, we set the options and perform any global operations with `init`,
+;; and let the user determine when they want to bring up (a potentially
 ;; computationally intensive) system.
 (init)
 ```
