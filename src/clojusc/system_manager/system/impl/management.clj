@@ -137,7 +137,7 @@
    :startup startup
    :shutdown shutdown})
 
-(defn create-state-manager
+(defn create-manager
   [state-tracker]
   (->StateManager state-tracker))
 
