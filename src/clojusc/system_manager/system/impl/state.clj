@@ -78,7 +78,7 @@
    :get-system-ns get-system-ns
    :set-system-ns set-system-ns})
 
-(defn create-state-tracker
+(defn create-tracker
   ([]
     (create-state-tracker {}))
   ([options]
