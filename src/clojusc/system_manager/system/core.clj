@@ -11,7 +11,7 @@
 ;;;   System State API   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defprotocol StateTrackerAPI
+(defprotocol StateDataAPI
   (get-state [this])
   (set-state [this new-state])
   (get-status [this])
@@ -24,14 +24,14 @@
   (set-system-ns [this value]))
 
 (extend StateTracker
-        StateTrackerAPI
+        StateDataAPI
         state/behaviour)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   State Management API   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defprotocol StateManagementAPI
+(defprotocol StateTransitionAPI
   (init [this] [this mode])
   (deinit [this])
   (start [this] [this mode])
@@ -41,11 +41,12 @@
   (shutdown [this]))
 
 (extend StateManager
-        StateManagementAPI
+        StateTransitionAPI
         management/behaviour)
 
-(defn create-state-manager
-  [state-options]
-  (-> state-options
-      state/create-state-tracker
-      management/create-state-manager))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;   Constructors   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def create-state-tracker #'state/create-tracker)
+(def create-state-manager #'management/create-manager)
