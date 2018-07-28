@@ -15,7 +15,7 @@
        ns
        "\u001B[35m]\u001B[33m λ\u001B[m=> "))
 
-(defproject clojusc/system-manager "0.2.0"
+(defproject clojusc/system-manager "0.3.0-SNAPSHOT"
   :description "A Clojure library for setting up consistent Component-based systems"
   :url "https://github.com/clojusc/dev-system"
   :license {
