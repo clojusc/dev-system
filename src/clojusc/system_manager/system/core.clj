@@ -37,7 +37,6 @@
   (start [this] [this mode])
   (stop [this])
   (restart [this] [this mode])
-  (restart-component [this component-key])
   (startup [this] [this mode])
   (shutdown [this]))
 
@@ -45,4 +44,8 @@
         StateManagementAPI
         management/behaviour)
 
-(def create-state-manager #'management/create-state-manager)
+(defn create-state-manager
+  [state-options]
+  (-> state-options
+      state/create-state-tracker
+      management/create-state-manager))
