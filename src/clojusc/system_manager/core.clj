@@ -8,10 +8,10 @@
 ;;;   Management Global Vars   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(def ^:dynamic *mgr* nil)
-(def ^:dynamic *system-init-fn* 'identity)
-(def ^:dynamic *after-refresh-fn* (ns-resolve *ns* 'startup))
-(def ^:dynamic *throw-errors* false)
+(def ^:dynamic *mgr* (atom nil))
+(def ^:dynamic *system-init-fn* (atom 'identity))
+(def ^:dynamic *after-refresh-fn* (atom (ns-resolve *ns* 'startup)))
+(def ^:dynamic *throw-errors* (atom false))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Management System Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -21,20 +21,20 @@
 
 (defn- mgr-arg
   []
-  (or *mgr*
+  (or @*mgr*
       (let [msg (str "A state manager is not defined; "
                      "have you run (startup)?")]
-        (if *throw-errors*
+        (if @*throw-errors*
           (throw (new Exception msg))
           {:error msg}))))
 
 (defn- system-arg
   []
-  (if-let [state (:state *mgr*)]
+  (if-let [state (:state @*mgr*)]
     (system-api/get-system state)
     (let [msg (str "System data structure is not defined; "
                    "have you run (startup)?")]
-      (if *throw-errors*
+      (if @*throw-errors*
         (throw (new Exception msg))
         {:error msg}))))
 
@@ -52,9 +52,10 @@
 
 (defn startup
   []
-  (alter-var-root #'*mgr* (constantly (system-api/create-state-manager)))
-  (system-api/set-system-init-fn (:state *mgr*) *system-init-fn*)
-  (system-api/startup *mgr*))
+  (reset! *mgr* (atom (system-api/create-state-manager
+                       {:init-fn @*system-init-fn*
+                        :refresh-fn @*after-refresh-fn*})))
+  (system-api/startup @*mgr*))
 
 (defn shutdown
   []
@@ -83,9 +84,9 @@
 
 (defn setup-manager
   [opts]
-  (alter-var-root #'*system-init-fn* (constantly (:init opts)))
-  (alter-var-root #'*after-refresh-fn* (constantly (:after-refresh opts)))
-  (alter-var-root #'*throw-errors* (constantly (:throw-errors opts))))
+  (reset! *system-init-fn* (atom (:init opts)))
+  (reset! *after-refresh-fn* (atom (:after-refresh opts)))
+  (reset! *throw-errors* (atom (:throw-errors opts))))
 
 ;; Convenience wrappers
 

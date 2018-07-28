@@ -88,10 +88,8 @@
     (restart this :default))
   ([this mode]
     (stop this)
-    (start this mode)))
-
-(defn restart-component
-  ([this component-key]
+    (start this mode))
+  ([this mode component-key]
     ))
 
 (defn startup
@@ -136,11 +134,10 @@
    :start start
    :stop stop
    :restart restart
-   :restart-component restart-component
    :startup startup
    :shutdown shutdown})
 
 (defn create-state-manager
-  []
-  (->StateManager (state/create-state-tracker)))
+  [state-tracker]
+  (->StateManager state-tracker))
 

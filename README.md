@@ -11,6 +11,32 @@
 
 ## About
 
+### Purpose
+
+The [Component][component] Clojure library has been become an invaluable tool
+for Clojure developers who create applications with suites of potentially
+interdependent services or software that provides supporting functionality
+for other parts of the system. In real-world deployments, such system
+components often need to be started up in a particular (dependency) order,
+and conversely, shut down in a particular order.
+
+The Component library has a great design: it does one thing well, completely
+focusing on that. However, in nearly all of my production deployments, I need
+more functionality, things that assist with debugging, monitoring, and
+fine-tuned operations. These include such things as:
+
+1. More defined states (and related state transitions). Component has
+   `start` and `stop`, at the component level and at the system level.
+   I need to know if a system has been initialized or not; if so, has it been
+   started? Did it finish, and is it running? Has it been stopped, with
+   state data still available? Or has it been shutdown: stopped with no state
+   data?
+2. An API for accessing these states.
+3. An API for moving the system between those states
+
+
+### Evolution
+
 The code in this library is one of those things that has evolved over time and
 keeps getting copied and pasted into new projects, with slight updates and
 improvments at each new iteration. The most recent big improvements were
@@ -21,11 +47,35 @@ done:
    * the NASA CMR-Graph and CMR-OPeNDAP projects
    * the Clojang component project
 
-In partciular, the second one is where I shifted to a protocol-based approach.
-So far, I've been happiest with this approach, and wan to start using this
-across all my Clojure projects.
+In partciular, the second one is where an API emerged (using a protocol-based
+approach), and this was backported to the Hexagram projects. Afterward, the
+code was split out into it's own project, "dev-system". Once parts of it
+started being used for not just development systems in the REPL, but actual
+production applications, more refactoring ensued and the project was renamed
+"system-manager".
 
-A project of it's own is the first step :-)
+
+### Design
+
+The system-manager has three conceptual parts:
+
+1. Data: current state, the Component system data structure, and configuration
+   used to initialize or re=initialize (e.g., for restarts) the system. There
+   is an API for accessing and updating this data.
+1. Transitions: an API for moving the Component system manager between valid
+   state transitions (e.g., init, deinit, start, stop, etc.).
+1. High-level wrapper: the data and transitions API functions all take as their
+   first argument their respective protocol records, and this involves a
+   certain amount of boilerplate and repitition. The high-level wrapper takes
+   care of this by creating the record instances and automatically passing the
+   right ones to the right API functions, keeping the developer experience
+   clean and simple.
+
+The data can be changed by its own API functions, by those of the transition
+API, and of course by the high-level API as well. The data that need to be
+updated are system `:status` and the `:system` data structure itself. Both of
+these are stored in the state tracker, which is stored in the `*mgr*` data
+structure with the `:state` key.
 
 
 ## Usage
@@ -135,3 +185,4 @@ Apache License, Version 2.0.
 [deps-badge]: http://jarkeeper.com/clojusc/system-manager/status.svg
 [clojars]: https://clojars.org/clojusc/system-manager
 [clojars-badge]: https://img.shields.io/clojars/v/clojusc/system-manager.svg
+[component]: https://github.com/stuartsierra/component

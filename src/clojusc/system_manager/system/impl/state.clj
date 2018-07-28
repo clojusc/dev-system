@@ -8,26 +8,31 @@
 ;;;   State Atom   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(def ^:dynamic *state*
-  (atom {:status :stopped
-         :system nil
-         :init-fn 'identity
-         :refresh-fn 'identity
-         :ns ""}))
+(def default-state
+  {:status :stopped
+   :system nil
+   :init-fn 'identity
+   :refresh-fn 'identity
+   :ns ""})
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   System State Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defrecord StateTracker [])
+(defrecord StateTracker [
+  status
+  system
+  init-fn
+  refresh-fn
+  ns])
 
 (defn get-state
-  [_this]
-  @*state*)
+  [this]
+  this)
 
 (defn set-state
-  [_this new-state]
-  (reset! *state* new-state))
+  [this new-state]
+  (merge this new-state))
 
 (defn get-status
   [this]
@@ -74,5 +79,7 @@
    :set-system-ns set-system-ns})
 
 (defn create-state-tracker
-  []
-  (->StateTracker))
+  ([]
+    (create-state-tracker {}))
+  ([options]
+    (map->StateTracker (merge default-state options))))
