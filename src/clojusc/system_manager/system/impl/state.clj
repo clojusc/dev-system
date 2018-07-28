@@ -80,6 +80,10 @@
 
 (defn create-tracker
   ([]
-    (create-state-tracker {}))
+    (create-tracker {}))
   ([options]
     (map->StateTracker (merge default-state options))))
+
+(defn update-tracker
+  [this]
+  (map->StateTracker this))

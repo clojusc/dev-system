@@ -8,6 +8,8 @@
     (clojure.lang Namespace)
     (clojure.lang Symbol)))
 
+(declare update-manager)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Transition Vars   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -43,21 +45,28 @@
     (init this :default))
   ([this mode]
     (if (contains? invalid-init-transitions (state/get-status (:state this)))
-      (log/warn "System has aready been initialized.")
       (do
-        (state/set-system (:state this)
-                          (call-by-name (state/get-system-init-fn (:state this))))
-        (state/set-status (:state this) :initialized)))
-    (state/get-status (:state this))))
+        (log/warn "System has aready been initialized.")
+        this)
+      (do
+        (-> (:state this)
+            (state/set-system
+             (call-by-name
+              (state/get-system-init-fn (:state this))))
+            (state/set-status :initialized)
+            update-manager)))))
 
 (defn deinit
   [this]
   (if (contains? invalid-deinit-transitions (state/get-status (:state this)))
-    (log/error "System is not stopped; please stop before deinitializing.")
     (do
-      (state/set-system (:state this) nil)
-      (state/set-status (:state this) :uninitialized)))
-  (state/get-status (:state this)))
+      (log/error "System is not stopped; please stop before deinitializing.")
+      this)
+    (do
+      (-> (:state this)
+          (state/set-system nil)
+          (state/set-status :uninitialized)
+          update-manager))))
 
 (defn start
   ([this]
@@ -66,31 +75,38 @@
     (when (nil? (state/get-status (:state this)))
       (init mode))
     (if (contains? invalid-start-transitions (state/get-status (:state this)))
-      (log/warn "System has already been started.")
       (do
-        (state/set-system (:state this)
-                          (component/start (state/get-system (:state this))))
-        (state/set-status (:state this) :started)))
-    (state/get-status (:state this))))
+        (log/warn "System has already been started.")
+        this)
+      (do
+        (-> (:state this)
+            (state/set-system
+             (component/start
+              (state/get-system (:state this))))
+            (state/set-status :started)
+            update-manager)))))
 
 (defn stop
   [this]
   (if (contains? invalid-stop-transitions (state/get-status (:state this)))
     (log/warn "System already stopped.")
     (do
-      (state/set-system (:state this)
-                        (component/stop (state/get-system (:state this))))
-      (state/set-status (:state this) :stopped)))
-  (state/get-status (:state this)))
+      (-> (:state this)
+            (state/set-system
+             (component/stop
+              (state/get-system (:state this))))
+            (state/set-status :stopped)
+            update-manager))))
 
 (defn restart
   ([this]
     (restart this :default))
   ([this mode]
-    (stop this)
-    (start this mode))
+    (-> this
+        (stop)
+        (start mode)))
   ([this mode component-key]
-    ))
+    this))
 
 (defn startup
   "Initialize a system and start all of its components.
@@ -99,34 +115,62 @@
   ([this]
     (startup this :default))
   ([this mode]
-    (if (contains? invalid-startup-transitions (state/get-status (:state this)))
-      (log/warn "System is already running.")
-      (do
-        (when-not (contains? invalid-init-transitions
-                             (state/get-status (:state this)))
-          (init this mode))
-        (when-not (contains? invalid-start-transitions
-                            (state/get-status (:state this)))
-          (start this mode))
-        (state/set-status (:state this) :running)
-        (state/get-status (:state this))))))
+    (cond (contains? invalid-startup-transitions
+                     (state/get-status (:state this)))
+          (do
+            (log/warn "System is already running.")
+            this)
+
+          (not (contains? invalid-init-transitions
+                          (state/get-status (:state this))))
+          (-> this
+              (init mode)
+              (start mode)
+              :state
+              (state/set-status :running)
+              update-manager)
+
+          (not (contains? invalid-start-transitions
+                          (state/get-status (:state this))))
+          (-> this
+              (start mode)
+              :state
+              (state/set-status :running)
+              update-manager)
+
+          :else
+          this)))
 
 (defn shutdown
   [this]
   "Stop a running system and de-initialize it.
 
   This is essentially a convenience wrapper for `stop` + `deinit`."
-  (if (contains? invalid-shutdown-transitions (state/get-status (:state this)))
-    (log/warn "System is already shutdown.")
-    (do
-      (when-not (contains? invalid-stop-transitions
-                           (state/get-status (:state this)))
-        (stop this))
-      (when-not (contains? invalid-deinit-transitions
-                           (state/get-status (:state this)))
-        (deinit this))
-      (state/set-status (:state this) :shutdown)
-      (state/get-status (:state this)))))
+  (cond (contains? invalid-shutdown-transitions
+                   (state/get-status (:state this)))
+        (do
+          (log/warn "System is already shutdown.")
+          this)
+
+        (not (contains? invalid-stop-transitions
+                        (state/get-status (:state this))))
+        (-> this
+            stop
+            deinit
+            :state
+            (state/set-status :shutdown)
+            update-manager)
+
+        (not (contains? invalid-deinit-transitions
+                        (state/get-status (:state this))))
+        (-> this
+            deinit
+            :state
+            (state/set-status :shutdown)
+            update-manager)
+
+        :else
+        this))
 
 (def behaviour
   {:init init
@@ -141,3 +185,4 @@
   [state-tracker]
   (->StateManager state-tracker))
 
+(def update-manager #'create-manager)
