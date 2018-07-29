@@ -76,11 +76,14 @@
 
 (defn shutdown
   []
-  (when *mgr*
-    (reset-mgr! (system-api/shutdown @*mgr*))
-    (let [result (system-api/get-status (state-arg))]
-      (reset-mgr! nil)
-      result)))
+  (let [mgr (mgr-arg)]
+    (if (:error mgr)
+      mgr
+     (do
+      (reset-mgr! (system-api/shutdown mgr))
+      (let [result (system-api/get-status (state-arg))]
+        (reset-mgr! nil)
+        result)))))
 
 (defn restart
   ([]
@@ -96,7 +99,7 @@
 (defn reset
   []
   (shutdown)
-  (repl/refresh :after *after-refresh-fn*))
+  (repl/refresh :after @*after-refresh-fn*))
 
 (def refresh #'repl/refresh)
 
