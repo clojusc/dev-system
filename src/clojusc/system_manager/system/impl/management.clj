@@ -28,7 +28,7 @@
 
 (defn- call-by-name
   ([^Symbol ns-slash-fn]
-    (apply (resolve ns-slash-fn) []))
+    (call-by-name ns-slash-fn []))
   ([^Symbol ns-slash-fn args]
     (apply (resolve ns-slash-fn) args))
   ([^Namespace an-ns ^Symbol a-fun args]
