@@ -2,7 +2,8 @@
   "High-level system management API for a Component-based system."
   (:require
     [clojure.tools.namespace.repl :as repl]
-    [clojusc.system-manager.system.core :as system-api]))
+    [clojusc.system-manager.system.core :as system-api]
+    [com.stuartsierra.component :as component]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Management Global Options   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -91,8 +92,9 @@
     (startup))
   ([component-key]
     (->> component-key
-         (system-api/restart (system-arg))
-         reset-mgr!)))
+         (system-api/restart (mgr-arg))
+         reset-mgr!)
+    (system-api/get-status (state-arg))))
 
 ;; Reloading Management
 
@@ -132,3 +134,9 @@
 (defn get-system-ns
   []
   (call-if-no-error system-api/get-system-ns (state-arg)))
+
+(def dependencies #'component/dependencies)
+
+(defn dependency-graph
+  [component]
+  (component/dependency-graph (system-arg) component))
