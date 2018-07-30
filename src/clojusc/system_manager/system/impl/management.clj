@@ -48,13 +48,12 @@
       (do
         (log/warn "System has aready been initialized.")
         this)
-      (do
-        (-> (:state this)
-            (state/set-system
-             (call-by-name
-              (state/get-system-init-fn (:state this))))
-            (state/set-status :initialized)
-            update-manager)))))
+      (-> (:state this)
+          (state/set-system
+           (call-by-name
+            (state/get-system-init-fn (:state this))))
+          (state/set-status :initialized)
+          update-manager))))
 
 (defn deinit
   [this]
@@ -62,11 +61,10 @@
     (do
       (log/error "System is not stopped; please stop before deinitializing.")
       this)
-    (do
-      (-> (:state this)
-          (state/set-system nil)
-          (state/set-status :uninitialized)
-          update-manager))))
+    (-> (:state this)
+        (state/set-system nil)
+        (state/set-status :uninitialized)
+        update-manager)))
 
 (defn start
   ([this]
@@ -78,25 +76,23 @@
       (do
         (log/warn "System has already been started.")
         this)
-      (do
-        (-> (:state this)
-            (state/set-system
-             (component/start
-              (state/get-system (:state this))))
-            (state/set-status :started)
-            update-manager)))))
+      (-> (:state this)
+          (state/set-system
+           (component/start
+            (state/get-system (:state this))))
+          (state/set-status :started)
+          update-manager))))
 
 (defn stop
   [this]
   (if (contains? invalid-stop-transitions (state/get-status (:state this)))
     (log/warn "System already stopped.")
-    (do
-      (-> (:state this)
-            (state/set-system
-             (component/stop
-              (state/get-system (:state this))))
-            (state/set-status :stopped)
-            update-manager))))
+    (-> (:state this)
+          (state/set-system
+           (component/stop
+            (state/get-system (:state this))))
+          (state/set-status :stopped)
+          update-manager)))
 
 (defn restart
   ([this]
