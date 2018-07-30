@@ -106,7 +106,17 @@
         (stop)
         (start mode)))
   ([this mode component-key]
-    this))
+    ;; Bring down the component and its dependencies
+    (let [stopped-manager (component/update-system-reverse
+                           (get-in this [:state :system])
+                           [component-key]
+                           #(stop this))
+      ;; Now bring it/them back up
+          started-manager (component/update-system
+                           (get-in stopped-manager [:state :system])
+                           [component-key]
+                           #(start stopped-manager))]
+      started-manager)))
 
 (defn startup
   "Initialize a system and start all of its components.
