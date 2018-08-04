@@ -148,10 +148,10 @@
           this)))
 
 (defn shutdown
-  [this]
   "Stop a running system and de-initialize it.
 
   This is essentially a convenience wrapper for `stop` + `deinit`."
+  [this]
   (cond (contains? invalid-shutdown-transitions
                    (state/get-status (:state this)))
         (do
