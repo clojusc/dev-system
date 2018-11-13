@@ -1,16 +1,14 @@
 
 
+                        Created by the CLOJURE-AIDED ENRICHMENT CENTER
+
                |
 ,---.,   .,---.|--- ,---.,-.-.     ,-.-.,---.,---.,---.,---.,---.,---.
 `---.|   |`---.|    |---'| | | --- | | |,---||   |,---||   ||---'|
 `---'`---|`---'`---'`---'` ' '     ` ' '`---^`   '`---^`---|`---'`
      `---'                                             `---'
 
+https://github.com/clojusc
 
-
-Created by the CLOJURE-AIDED ENRICHMENT CENTER
-
-                    https://github.com/clojusc
-
-                "Throwing science at the wall"
+"Throwing science at the wall"
 
